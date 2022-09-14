@@ -2,6 +2,8 @@ package com.easylife.mooddiary
 
 import android.app.Application
 import com.easylife.mooddiary.common.appModule
+import com.easylife.mooddiary.data.repositoryModule
+import com.easylife.mooddiary.domain.useCaseModule
 import com.easylife.mooddiary.ui.screen.analytics.analyticsModule
 import com.easylife.mooddiary.ui.screen.diary.diaryModule
 import com.easylife.mooddiary.ui.screen.main.mainModule
@@ -22,6 +24,8 @@ class MoodyApplication: Application() {
         mainModule,
         diaryModule,
         analyticsModule,
+        repositoryModule,
+        useCaseModule
     )
 
     override fun onCreate() {

@@ -24,7 +24,8 @@ import org.koin.core.parameter.parametersOf
 fun BottomNavGraph(navController: NavHostController) {
     AnimatedNavHost(
         navController = navController,
-        startDestination = Screen.Diary.route
+        startDestination = Screen.Diary.route,
+        modifier = Modifier.systemBarsPadding()
     ) {
 
         composable(route = Screen.Diary.route) {

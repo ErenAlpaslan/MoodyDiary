@@ -3,9 +3,12 @@
 
     <string name="button_get_started">Get started</string>
 
+    <!-- Main -->
+    <string name="navigation_item_diary">Diary</string>
+    <string name="navigation_item_analytics">Analytics</string>
+
     <!-- Onboarding -->
     <string name="onboarding_title">Catch your\n<b>mood</b></string>
     <string name="onboarding_description">Here you can track your mood 🙂 This helps you self reflect and understand your feelings better. The app has a convenient calendar 📅 that allows you to find entries made at any date.</string>
-
 
 </resources>
