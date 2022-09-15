@@ -18,9 +18,11 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.easylife.mooddiary.base.BaseScreen
+import com.easylife.mooddiary.common.AppConstant
 import com.easylife.mooddiary.ui.navigation.BottomNavGraph
 import com.easylife.mooddiary.ui.navigation.Screen
 import com.easylife.mooddiary.ui.screen.diary.DiaryScreen
+import com.easylife.mooddiary.utils.extensions.getCurrentYear
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import kotlinx.coroutines.launch
 
@@ -52,8 +54,6 @@ class MainScreen : BaseScreen<MainViewModel, MainNavigationActions>() {
     @Composable
     override fun Content() {
         val navController = rememberAnimatedNavController()
-        val coroutineScope = rememberCoroutineScope()
-        val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
         val navigateTo: (String) -> Unit = {
             navController.navigate(it) {
                 popUpTo(navController.graph.findStartDestination().id) {
@@ -63,59 +63,22 @@ class MainScreen : BaseScreen<MainViewModel, MainNavigationActions>() {
                 restoreState = true
             }
         }
-
-        var isDiaryPage by remember {
-            mutableStateOf(true)
-        }
-        val month by remember {
-            DiaryScreen.month
-        }
-
         val uiState by viewModel.uiState.collectAsState()
 
         ModalNavigationDrawer(
-            drawerState = drawerState,
+            drawerState = DiaryScreen.drawerState,
             drawerContent = {
                 MainDrawerContent()
             }
         ) {
             Scaffold(
                 modifier = Modifier
-                    .fillMaxSize(),
-                topBar = {
-                    CenterAlignedTopAppBar(
-                        title = {
-                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Text(text = "Moody", style = MaterialTheme.typography.bodyLarge)
-                                if (isDiaryPage) {
-                                    Text(
-                                        text = month?.lowercase() ?: "",
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.primary
-                                    )
-                                }
-                            }
-                        },
-                        navigationIcon = {
-                            IconButton(onClick = {
-                                coroutineScope.launch {
-                                    drawerState.open()
-                                }
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Rounded.Menu,
-                                    contentDescription = "Hamburger Menu"
-                                )
-                            }
-                        }
-                    )
-                },
+                    .fillMaxSize()
+                    .systemBarsPadding(),
                 bottomBar = {
                     NavigationBar(modifier = Modifier.navigationBarsPadding()) {
                         val navBackStackEntry by navController.currentBackStackEntryAsState()
                         val currentDestination = navBackStackEntry?.destination
-                        isDiaryPage = currentDestination?.hierarchy?.any { it.route == Screen.Diary.route } == true
-
                         items.forEachIndexed { index, item ->
                             if (item.isFab) {
                                 FloatingActionButton(
@@ -152,8 +115,4 @@ class MainScreen : BaseScreen<MainViewModel, MainNavigationActions>() {
             }
         }
     }
-}
-
-interface MonthChangedListener {
-    fun onMonthChanged()
 }

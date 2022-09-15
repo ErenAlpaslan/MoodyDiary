@@ -12,9 +12,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import com.easylife.mooddiary.entity.SingleDatePoint
 import com.easylife.mooddiary.utils.extensions.getMonth
-import com.easylife.mooddiary.utils.extensions.isHalfPastItemLeft
-import com.easylife.mooddiary.utils.extensions.isHalfPastItemRight
-import com.easylife.mooddiary.utils.extensions.scrollBasic
 
 /**
  * Created by erenalpaslan on 14.09.2022

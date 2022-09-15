@@ -27,8 +27,13 @@ class DiaryViewModel(
     private val _uiState: MutableStateFlow<DiaryScreenUiModel> = MutableStateFlow(DiaryScreenUiModel())
     val uiState: StateFlow<DiaryScreenUiModel> = _uiState
 
-    fun getDates() = viewModelScope.launch{
-        getDatesUseCase.execute(GetDatesUseCase.Param("")).collect { result ->
+    fun getDates(year: Int? = null) = viewModelScope.launch{
+        if (year != null) {
+            _uiState.update {
+                it.copy(year = year)
+            }
+        }
+        getDatesUseCase.execute(GetDatesUseCase.Param(year)).collect { result ->
             when(result) {
                 is AppResult.Error -> _error.postValue(getErrorMessage(result))
                 is AppResult.Success -> {
@@ -39,6 +44,16 @@ class DiaryViewModel(
                     }
                 }
             }
+        }
+    }
+
+    fun onYearChanged(year: Int) {
+        getDates(year)
+    }
+
+    fun onMonthChanged(month: String?) = viewModelScope.launch{
+        _uiState.update {
+            it.copy(month = month)
         }
     }
 

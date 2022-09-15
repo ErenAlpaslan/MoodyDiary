@@ -7,6 +7,6 @@ import com.easylife.mooddiary.entity.SingleDatePoint
  */
 interface DateRepository {
 
-    suspend fun createDatesOfTheYear(): List<SingleDatePoint>
+    suspend fun createDatesOfTheYear(year: Int): List<SingleDatePoint>
 
 }

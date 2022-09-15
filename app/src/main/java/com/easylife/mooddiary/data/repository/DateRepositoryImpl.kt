@@ -10,10 +10,11 @@ import java.util.*
  */
 class DateRepositoryImpl: DateRepository {
 
-    override suspend fun createDatesOfTheYear(): List<SingleDatePoint> {
+    override suspend fun createDatesOfTheYear(year: Int): List<SingleDatePoint> {
         val formatter = SimpleDateFormat("dd.MMM.yyyy")
         val list = arrayListOf<SingleDatePoint>()
         val cal = Calendar.getInstance()
+        cal.set(Calendar.YEAR, year)
 
         Calendar.getInstance().let { calendar ->
             calendar.add(Calendar.MONTH, -11)

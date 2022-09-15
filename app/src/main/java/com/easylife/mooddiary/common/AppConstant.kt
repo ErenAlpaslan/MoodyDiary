@@ -8,4 +8,6 @@ object AppConstant {
     //Database
     const val DATABASE_NAME = "MoodyDb"
 
+    //Date
+    const val MIN_YEAR = 2020
 }
