@@ -53,7 +53,7 @@ fun DateItem(
             Text(
                 text = date.day ?: "",
                 style = MaterialTheme.typography.bodyLarge,
-                color = if (!month.isNullOrEmpty() && date.month != month) Gray else Color.Black
+                color = if (selected) Color.White else if (!month.isNullOrEmpty() && date.month != month) Gray else Color.Black
             )
         }
 

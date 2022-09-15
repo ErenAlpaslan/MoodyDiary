@@ -1,6 +1,8 @@
 package com.easylife.mooddiary.ui.navigation
 
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -21,11 +23,13 @@ import org.koin.core.parameter.parametersOf
  */
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun BottomNavGraph(navController: NavHostController) {
+fun BottomNavGraph(
+    navController: NavHostController,
+    paddingValues: PaddingValues
+) {
     AnimatedNavHost(
         navController = navController,
-        startDestination = Screen.Diary.route,
-        modifier = Modifier.systemBarsPadding()
+        startDestination = Screen.Diary.route
     ) {
 
         composable(route = Screen.Diary.route) {

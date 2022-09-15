@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
@@ -20,6 +21,7 @@ import com.easylife.mooddiary.base.BaseScreen
 import com.easylife.mooddiary.common.AppConstant
 import com.easylife.mooddiary.ui.view.DateItem
 import com.easylife.mooddiary.ui.view.DateSelector
+import com.easylife.mooddiary.ui.view.DiaryItem
 import com.easylife.mooddiary.utils.extensions.getCurrentYear
 import com.google.accompanist.insets.systemBarsPadding
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -99,9 +101,33 @@ class DiaryScreen : BaseScreen<DiaryViewModel, DiaryNavigationActions>() {
                 )
             },
             content = {
-                Column {
-                    DateSelector(list = uiState.dates) {
-                        viewModel.onMonthChanged(it)
+                Column(modifier = Modifier.padding(it)) {
+                    DateSelector(
+                        list = uiState.dates,
+                        onMonthChanged = {
+                            viewModel.onMonthChanged(it)
+                        },
+                        onDateSelected = {
+                            viewModel.onDateSelected(it)
+                        }
+                    )
+                    LazyColumn(modifier = Modifier.padding(bottom = 76.dp, start = 16.dp, end = 16.dp)) {
+                        item {
+                            Spacer(modifier = Modifier.height(10.dp))
+                        }
+                        if (uiState.selectedDate != null) {
+                            item {
+                                Text(
+                                    text = "${uiState.selectedDate?.month} ${uiState.year}",
+                                    style = MaterialTheme.typography.headlineMedium
+                                )
+                                Spacer(modifier = Modifier.height(10.dp))
+                            }
+                        }
+
+                        items(3) {
+                            DiaryItem()
+                        }
                     }
                 }
             }

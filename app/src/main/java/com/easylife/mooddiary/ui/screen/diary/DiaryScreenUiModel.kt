@@ -10,5 +10,6 @@ import com.easylife.mooddiary.utils.extensions.getCurrentYear
 data class DiaryScreenUiModel(
     val dates: List<SingleDatePoint> = listOf(),
     val year: Int = getCurrentYear(),
-    val month: String? = getCurrentMonth()
+    val month: String? = getCurrentMonth(),
+    val selectedDate: SingleDatePoint? = null
 )

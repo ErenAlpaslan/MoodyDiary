@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Divider
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import com.easylife.mooddiary.entity.SingleDatePoint
@@ -19,7 +20,8 @@ import com.easylife.mooddiary.utils.extensions.getMonth
 @Composable
 fun DateSelector(
     list: List<SingleDatePoint>,
-    onMonthChanged: (String?) -> Unit
+    onMonthChanged: (String?) -> Unit,
+    onDateSelected: (SingleDatePoint) -> Unit
 ) {
 
     val screenWidth = LocalConfiguration.current.screenWidthDp
@@ -37,7 +39,7 @@ fun DateSelector(
         onMonthChanged(month)
     }
 
-    Column(modifier = Modifier.padding(top = 76.dp)){
+    Column{
         LazyRow (
             state = listState,
             horizontalArrangement = Arrangement.SpaceAround
@@ -50,6 +52,7 @@ fun DateSelector(
                     itemWidth = (screenWidth / 7),
                     selected = selectedIndex == index
                 ) {
+                    onDateSelected(date)
                     selectedIndex = it
                 }
             }

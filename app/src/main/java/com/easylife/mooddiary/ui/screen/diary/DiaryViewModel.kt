@@ -57,4 +57,12 @@ class DiaryViewModel(
         }
     }
 
+    fun onDateSelected(date: SingleDatePoint) {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(selectedDate = date)
+            }
+        }
+    }
+
 }

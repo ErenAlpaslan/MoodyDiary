@@ -72,11 +72,9 @@ class MainScreen : BaseScreen<MainViewModel, MainNavigationActions>() {
             }
         ) {
             Scaffold(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .systemBarsPadding(),
+                modifier = Modifier.fillMaxSize(),
                 bottomBar = {
-                    NavigationBar(modifier = Modifier.navigationBarsPadding()) {
+                    NavigationBar() {
                         val navBackStackEntry by navController.currentBackStackEntryAsState()
                         val currentDestination = navBackStackEntry?.destination
                         items.forEachIndexed { index, item ->
@@ -111,7 +109,10 @@ class MainScreen : BaseScreen<MainViewModel, MainNavigationActions>() {
                     }
                 }
             ) {
-                BottomNavGraph(navController = navController)
+                BottomNavGraph(
+                    navController = navController,
+                    paddingValues = it
+                )
             }
         }
     }
