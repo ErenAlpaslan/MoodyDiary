@@ -3,10 +3,7 @@ package com.easylife.mooddiary.ui.screen.diary
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowDropDown
@@ -37,12 +34,23 @@ class DiaryScreen : BaseScreen<DiaryViewModel, DiaryNavigationActions>() {
     override fun Content() {
         val uiState by viewModel.uiState.collectAsState()
         LaunchedEffect(key1 = "") {
-            viewModel.getDates(null)
+            viewModel.getDates(null, true)
         }
 
         val coroutineScope = rememberCoroutineScope()
         var dropdownExpanded by remember {
             mutableStateOf(false)
+        }
+        val listState = rememberLazyListState()
+
+        LaunchedEffect(
+            key1 = uiState.selectedIndex
+        ) {
+            uiState.selectedIndex?.let {
+                launch {
+                    listState.scrollToItem(it)
+                }
+            }
         }
 
         Scaffold(
@@ -103,7 +111,9 @@ class DiaryScreen : BaseScreen<DiaryViewModel, DiaryNavigationActions>() {
             content = {
                 Column(modifier = Modifier.padding(it)) {
                     DateSelector(
+                        state = listState,
                         list = uiState.dates,
+                        selected = uiState.selectedIndex,
                         onMonthChanged = {
                             viewModel.onMonthChanged(it)
                         },

@@ -1,6 +1,7 @@
 package com.easylife.mooddiary.utils.extensions
 
 import com.easylife.mooddiary.entity.SingleDatePoint
+import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -23,4 +24,14 @@ fun getCurrentYear(): Int {
 fun getCurrentMonth(): String? {
     val cal = Calendar.getInstance()
     return cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())
+}
+
+fun List<SingleDatePoint>.getTodayIndex(): Int {
+    val formatter = SimpleDateFormat("dd.MMM.yyyy")
+    val cal = Calendar.getInstance()
+    return try {
+        this.indexOfFirst { it.date == formatter.format(cal.time) }
+    }catch(e: Exception) {
+        0
+    }
 }

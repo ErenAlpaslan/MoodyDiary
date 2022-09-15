@@ -11,5 +11,6 @@ data class DiaryScreenUiModel(
     val dates: List<SingleDatePoint> = listOf(),
     val year: Int = getCurrentYear(),
     val month: String? = getCurrentMonth(),
-    val selectedDate: SingleDatePoint? = null
+    val selectedDate: SingleDatePoint? = null,
+    val selectedIndex: Int? = null
 )

@@ -6,6 +6,7 @@ import com.easylife.mooddiary.base.BaseViewModel
 import com.easylife.mooddiary.domain.usecases.GetDatesUseCase
 import com.easylife.mooddiary.entity.SingleDatePoint
 import com.easylife.mooddiary.utils.extensions.getErrorMessage
+import com.easylife.mooddiary.utils.extensions.getTodayIndex
 import com.easylife.wallpaperapp.utils.AppResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,7 +28,7 @@ class DiaryViewModel(
     private val _uiState: MutableStateFlow<DiaryScreenUiModel> = MutableStateFlow(DiaryScreenUiModel())
     val uiState: StateFlow<DiaryScreenUiModel> = _uiState
 
-    fun getDates(year: Int? = null) = viewModelScope.launch{
+    fun getDates(year: Int? = null, scrollTo: Boolean = false) = viewModelScope.launch{
         if (year != null) {
             _uiState.update {
                 it.copy(year = year)
@@ -38,8 +39,19 @@ class DiaryViewModel(
                 is AppResult.Error -> _error.postValue(getErrorMessage(result))
                 is AppResult.Success -> {
                     result.data?.let { list ->
-                        _uiState.update {
-                            it.copy(dates = list)
+                        if (scrollTo) {
+                            val todayIndex = list.getTodayIndex()
+                            _uiState.update {
+                                it.copy(
+                                    dates = list,
+                                    selectedDate = list[todayIndex],
+                                    selectedIndex = todayIndex
+                                )
+                            }
+                        }else {
+                            _uiState.update {
+                                it.copy(dates = list)
+                            }
                         }
                     }
                 }
@@ -48,7 +60,7 @@ class DiaryViewModel(
     }
 
     fun onYearChanged(year: Int) {
-        getDates(year)
+        getDates(year, false)
     }
 
     fun onMonthChanged(month: String?) = viewModelScope.launch{

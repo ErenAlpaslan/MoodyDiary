@@ -2,6 +2,7 @@ package com.easylife.mooddiary.ui.view
 
 import android.util.Log
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -19,13 +20,13 @@ import com.easylife.mooddiary.utils.extensions.getMonth
  */
 @Composable
 fun DateSelector(
+    state: LazyListState,
     list: List<SingleDatePoint>,
+    selected: Int? = null,
     onMonthChanged: (String?) -> Unit,
     onDateSelected: (SingleDatePoint) -> Unit
 ) {
-
     val screenWidth = LocalConfiguration.current.screenWidthDp
-    val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
     var selectedIndex by remember {
         mutableStateOf(-1)
@@ -34,14 +35,20 @@ fun DateSelector(
         mutableStateOf<String?>(null)
     }
 
-    if (listState.firstVisibleItemIndex > 0) {
-        month = list[list.getMonth(listState.firstVisibleItemIndex)].month
+    if (state.firstVisibleItemIndex > 0) {
+        month = list[list.getMonth(state.firstVisibleItemIndex)].month
         onMonthChanged(month)
+    }
+    
+    LaunchedEffect(key1 = selected) {
+        selected?.let {
+            selectedIndex = it
+        }
     }
 
     Column{
         LazyRow (
-            state = listState,
+            state = state,
             horizontalArrangement = Arrangement.SpaceAround
         ){
             itemsIndexed(list) {index, date ->
