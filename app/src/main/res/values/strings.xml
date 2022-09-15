@@ -11,4 +11,29 @@
     <string name="onboarding_title">Catch your\n<b>mood</b></string>
     <string name="onboarding_description">Here you can track your mood 🙂 This helps you self reflect and understand your feelings better. The app has a convenient calendar 📅 that allows you to find entries made at any date.</string>
 
+    <!-- New diary -->
+    <string name="new_diary_happy">Happy</string>
+    <string name="new_diary_excited">Excited</string>
+    <string name="new_diary_normal">Not bad</string>
+    <string name="new_diary_bad">Bad</string>
+    <string name="new_diary_very_sad">Very sad</string>
+
+    <string name="new_diary_emotion_excited">Excited</string>
+    <string name="new_diary_emotion_relaxed">Relaxed</string>
+    <string name="new_diary_emotion_proud">Proud</string>
+    <string name="new_diary_emotion_hopeful">Hopeful</string>
+    <string name="new_diary_emotion_happy">Happy</string>
+    <string name="new_diary_emotion_enthusiastic">Enthusiastic</string>
+    <string name="new_diary_emotion_refreshed">Refreshed</string>
+    <string name="new_diary_emotion_gloomy">Gloomy</string>
+    <string name="new_diary_emotion_lonely">Lonely</string>
+    <string name="new_diary_emotion_anxious">Anxious</string>
+    <string name="new_diary_emotion_sad">Sad</string>
+    <string name="new_diary_emotion_angry">Angry</string>
+    <string name="new_diary_emotion_tired">Tired</string>
+    <string name="new_diary_emotion_annoyed">Annoyed</string>
+    <string name="new_diary_emotion_burdensome">Burdensome</string>
+    <string name="new_diary_emotion_bored">Bored</string>
+    <string name="new_diary_emotion_stressed">Stressed</string>
+
 </resources>

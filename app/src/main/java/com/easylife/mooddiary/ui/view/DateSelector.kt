@@ -39,7 +39,7 @@ fun DateSelector(
         month = list[list.getMonth(state.firstVisibleItemIndex)].month
         onMonthChanged(month)
     }
-    
+
     LaunchedEffect(key1 = selected) {
         selected?.let {
             selectedIndex = it

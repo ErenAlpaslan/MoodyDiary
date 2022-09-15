@@ -3,9 +3,12 @@ package com.easylife.mooddiary.ui.screen.main
 import com.easylife.mooddiary.R
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.BottomSheetScaffold
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Menu
+import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,6 +25,7 @@ import com.easylife.mooddiary.common.AppConstant
 import com.easylife.mooddiary.ui.navigation.BottomNavGraph
 import com.easylife.mooddiary.ui.navigation.Screen
 import com.easylife.mooddiary.ui.screen.diary.DiaryScreen
+import com.easylife.mooddiary.ui.view.NewDiaryBottomSheet
 import com.easylife.mooddiary.utils.extensions.getCurrentYear
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import kotlinx.coroutines.launch
@@ -50,7 +54,9 @@ class MainScreen : BaseScreen<MainViewModel, MainNavigationActions>() {
         )
     )
 
-    @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class)
+    @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class,
+        ExperimentalMaterialApi::class
+    )
     @Composable
     override fun Content() {
         val navController = rememberAnimatedNavController()
@@ -64,6 +70,10 @@ class MainScreen : BaseScreen<MainViewModel, MainNavigationActions>() {
             }
         }
         val uiState by viewModel.uiState.collectAsState()
+        val scaffoldState = rememberBottomSheetScaffoldState()
+        var isNewDiaryDialogVisible by remember {
+            mutableStateOf(false)
+        }
 
         ModalNavigationDrawer(
             drawerState = DiaryScreen.drawerState,
@@ -71,49 +81,69 @@ class MainScreen : BaseScreen<MainViewModel, MainNavigationActions>() {
                 MainDrawerContent()
             }
         ) {
-            Scaffold(
-                modifier = Modifier.fillMaxSize(),
-                bottomBar = {
-                    NavigationBar() {
-                        val navBackStackEntry by navController.currentBackStackEntryAsState()
-                        val currentDestination = navBackStackEntry?.destination
-                        items.forEachIndexed { index, item ->
-                            if (item.isFab) {
-                                FloatingActionButton(
-                                    onClick = { /*TODO*/ },
-                                    modifier = Modifier.padding(top = 10.dp)
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Rounded.Add,
-                                        contentDescription = "Add Icon"
+            BottomSheetScaffold(
+                sheetContent = {
+
+                },
+                scaffoldState = scaffoldState,
+                sheetPeekHeight = 0.dp
+            ) {
+                Scaffold(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(it),
+                    bottomBar = {
+                        NavigationBar() {
+                            val navBackStackEntry by navController.currentBackStackEntryAsState()
+                            val currentDestination = navBackStackEntry?.destination
+                            items.forEachIndexed { index, item ->
+                                if (item.isFab) {
+                                    FloatingActionButton(
+                                        onClick = {
+                                            isNewDiaryDialogVisible = true
+                                        },
+                                        modifier = Modifier.padding(top = 10.dp)
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Rounded.Add,
+                                            contentDescription = "Add Icon"
+                                        )
+                                    }
+                                } else {
+                                    NavigationBarItem(
+                                        selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
+                                        onClick = {
+                                            navigateTo(item.route)
+                                        },
+                                        icon = {
+                                            Icon(
+                                                painter = painterResource(id = item.icon),
+                                                contentDescription = ""
+                                            )
+                                        },
+                                        label = {
+                                            Text(text = stringResource(id = item.screen))
+                                        }
                                     )
                                 }
-                            } else {
-                                NavigationBarItem(
-                                    selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
-                                    onClick = {
-                                        navigateTo(item.route)
-                                    },
-                                    icon = {
-                                        Icon(
-                                            painter = painterResource(id = item.icon),
-                                            contentDescription = ""
-                                        )
-                                    },
-                                    label = {
-                                        Text(text = stringResource(id = item.screen))
-                                    }
-                                )
                             }
                         }
                     }
+                ) {
+                    BottomNavGraph(
+                        navController = navController,
+                        paddingValues = it
+                    )
                 }
-            ) {
-                BottomNavGraph(
-                    navController = navController,
-                    paddingValues = it
-                )
             }
+        }
+
+        if (isNewDiaryDialogVisible) {
+            NewDiaryBottomSheet(
+                onDismissRequest = {
+                    isNewDiaryDialogVisible = false
+                }
+            )
         }
     }
 }

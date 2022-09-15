@@ -81,6 +81,7 @@ dependencies {
     implementation "com.google.accompanist:accompanist-insets-ui:0.26.0-alpha"
     implementation "com.google.accompanist:accompanist-permissions:0.24.8-beta"
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.17.0"
+    implementation "com.google.accompanist:accompanist-flowlayout:0.26.3-beta"
 
 
     def koin_version= "3.2.0"
