@@ -3,10 +3,10 @@ package com.easylife.mooddiary.ui.view
 import android.graphics.Paint.Align
 import android.widget.Space
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.*
 import com.easylife.mooddiary.R
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -24,6 +24,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -32,8 +34,12 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.easylife.mooddiary.common.enums.EmotionTypes
 import com.easylife.mooddiary.common.enums.MoodTypes
+import com.easylife.mooddiary.common.enums.SphereTypes
 import com.easylife.mooddiary.entity.MoodItem
 import com.easylife.mooddiary.ui.theme.*
+import com.easylife.mooddiary.ui.view.newdiary.EmotionList
+import com.easylife.mooddiary.ui.view.newdiary.MoodButton
+import com.easylife.mooddiary.ui.view.newdiary.SphereOfLifeButton
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -58,13 +64,14 @@ fun NewDiaryBottomSheet(
             .statusBarsPadding()
             .animateContentSize()
     }
+    val scrollState = rememberScrollState()
     var isAnimate by remember {
         mutableStateOf(false)
     }
     var selectedMoodIndex by remember {
         mutableStateOf(-1)
     }
-    var selectedEmotionIndex by remember {
+    var selectedSphereOfLifeIndex by remember {
         mutableStateOf(-1)
     }
 
@@ -75,6 +82,7 @@ fun NewDiaryBottomSheet(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black.copy(alpha = 0.6f))
+            .systemBarsPadding()
     ) {
         Card(
             shape = if (isAnimate) RoundedCornerShape(0.dp) else RoundedCornerShape(30.dp),
@@ -82,10 +90,12 @@ fun NewDiaryBottomSheet(
                 .padding(horizontal = if (isAnimate) 0.dp else 16.dp)
                 .then(if (isAnimate) y else x),
         ) {
-            Column(modifier = Modifier.padding(top = if (isAnimate) 16.dp else 0.dp)) {
+            Column(
+                modifier = Modifier.padding(top = if (isAnimate) 16.dp else 0.dp)
+            ) {
                 if (isAnimate) {
                     Text(
-                        text = "What is your mood?",
+                        text = stringResource(id = R.string.new_diary_what_is_your_mood),
                         style = MaterialTheme.typography.headlineSmall,
                         textAlign = TextAlign.Center,
                         modifier = Modifier
@@ -101,26 +111,13 @@ fun NewDiaryBottomSheet(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = if (isAnimate) 0.dp else 16.dp),
-                    verticalArrangement = if (isAnimate) Arrangement.Top else Arrangement.Center
+                    verticalArrangement = if (isAnimate) Arrangement.Top else Arrangement.Center,
+                    userScrollEnabled = false
                 ) {
                     itemsIndexed(MoodTypes.values()) { index, item ->
-                        Box(contentAlignment = Alignment.Center) {
-                            Button(
-                                onClick = {
-                                    selectedMoodIndex = index
-                                    isAnimate = true
-                                },
-                                colors = ButtonDefaults.buttonColors(containerColor = if (selectedMoodIndex == index) Green else Color.Transparent),
-                                shape = RoundedCornerShape(16.dp),
-                                contentPadding = PaddingValues(6.dp),
-                                modifier = Modifier.wrapContentWidth()
-                            ) {
-                                Image(
-                                    painter = painterResource(id = item.moodIcon),
-                                    contentDescription = stringResource(id = item.mood),
-                                    modifier = Modifier.size(if (selectedMoodIndex == index) 30.dp else 40.dp)
-                                )
-                            }
+                        MoodButton(item = item, selected = selectedMoodIndex == index) {
+                            selectedMoodIndex = index
+                            isAnimate = true
                         }
                     }
                 }
@@ -128,35 +125,48 @@ fun NewDiaryBottomSheet(
                 if (isAnimate) {
                     Spacer(modifier = Modifier.height(10.dp))
                     Text(
-                        text = "Emotions",
+                        text = stringResource(id = R.string.new_diary_emotions_title),
                         style = MaterialTheme.typography.bodyLarge,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth(),
                         color = Color.Black
                     )
 
-                    FlowRow(
-                        mainAxisSpacing = 3.dp,
-                        crossAxisSpacing = 3.dp,
-                        modifier = Modifier.padding(16.dp),
-                        mainAxisAlignment = FlowMainAxisAlignment.Center
+                    EmotionList(onEmotionSelected = {
+
+                    })
+
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Text(
+                        text = stringResource(id = R.string.new_diary_sphere_of_life_title),
+                        style = MaterialTheme.typography.bodyLarge,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth(),
+                        color = Color.Black
+                    )
+
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(4),
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .wrapContentHeight(),
+                        userScrollEnabled = false
                     ) {
-                        EmotionTypes.values().forEachIndexed { index, emotionTypes ->
-                            AssistChip(
-                                onClick = { selectedEmotionIndex = index },
-                                label = {
-                                    Text(text = stringResource(id = emotionTypes.emotionName))
-                                },
-                                colors = AssistChipDefaults.assistChipColors(
-                                    containerColor = if (selectedEmotionIndex == index) Green else LightGray,
-                                    labelColor = if (selectedEmotionIndex == index) DarkWhite else Color.Black
-                                ),
-                                border = null,
-                                shape = CircleShape
-                            )
+                        itemsIndexed(SphereTypes.values()) { index, item ->
+                            SphereOfLifeButton(item = item, selected = selectedSphereOfLifeIndex == index) {
+                                selectedSphereOfLifeIndex = index
+                            }
                         }
                     }
 
+                    Button(
+                        onClick = {  },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    ) {
+                        Text(text = stringResource(id = R.string.button_next))
+                    }
                 }
 
             }

@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">Moody Diary</string>
 
+    <!-- Button -->
     <string name="button_get_started">Get started</string>
+    <string name="button_next">Next</string>
 
     <!-- Main -->
     <string name="navigation_item_diary">Diary</string>
@@ -12,12 +14,18 @@
     <string name="onboarding_description">Here you can track your mood 🙂 This helps you self reflect and understand your feelings better. The app has a convenient calendar 📅 that allows you to find entries made at any date.</string>
 
     <!-- New diary -->
+    <string name="new_diary_what_is_your_mood">What is your mood?</string>
+    <string name="new_diary_emotions_title">Emotions</string>
+    <string name="new_diary_sphere_of_life_title">Sphere of life</string>
+
+    <!-- Moods -->
     <string name="new_diary_happy">Happy</string>
     <string name="new_diary_excited">Excited</string>
     <string name="new_diary_normal">Not bad</string>
     <string name="new_diary_bad">Bad</string>
     <string name="new_diary_very_sad">Very sad</string>
 
+    <!-- Emotions -->
     <string name="new_diary_emotion_excited">Excited</string>
     <string name="new_diary_emotion_relaxed">Relaxed</string>
     <string name="new_diary_emotion_proud">Proud</string>
@@ -35,5 +43,16 @@
     <string name="new_diary_emotion_burdensome">Burdensome</string>
     <string name="new_diary_emotion_bored">Bored</string>
     <string name="new_diary_emotion_stressed">Stressed</string>
+
+    <!-- Sphere of life -->
+    <string name="new_diary_sphere_work">Work</string>
+    <string name="new_diary_sphere_friends">Friends</string>
+    <string name="new_diary_sphere_love">Love</string>
+    <string name="new_diary_sphere_family">Family</string>
+    <string name="new_diary_sphere_personal">Personal</string>
+    <string name="new_diary_sphere_health">Health</string>
+    <string name="new_diary_sphere_finance">Finance</string>
+    <string name="new_diary_sphere_leisure">Leisure</string>
+
 
 </resources>

@@ -24,7 +24,8 @@ private val LightColorScheme = lightColorScheme(
     primaryContainer = Green,
     secondaryContainer = Green,
     onSecondaryContainer = DarkWhite,
-    onSurfaceVariant = Gray
+    onSurfaceVariant = Gray,
+    onSurface = Color.Black
 )
 
 @Composable
