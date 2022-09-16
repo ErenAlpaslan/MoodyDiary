@@ -4,6 +4,7 @@
     <!-- Button -->
     <string name="button_get_started">Get started</string>
     <string name="button_next">Next</string>
+    <string name="button_save">Save</string>
 
     <!-- Main -->
     <string name="navigation_item_diary">Diary</string>
@@ -53,6 +54,9 @@
     <string name="new_diary_sphere_health">Health</string>
     <string name="new_diary_sphere_finance">Finance</string>
     <string name="new_diary_sphere_leisure">Leisure</string>
+
+    <!-- Add note -->
+    <string name="new_diary_add_note">Add a note</string>
 
 
 </resources>

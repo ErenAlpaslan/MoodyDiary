@@ -53,19 +53,5 @@ fun EmotionList(
                 shape = CircleShape
             )
         }
-        EmotionTypes.values().forEachIndexed { index, emotionTypes ->
-            AssistChip(
-                onClick = { selectedEmotionIndex = index },
-                label = {
-                    Text(text = stringResource(id = emotionTypes.emotionName))
-                },
-                colors = AssistChipDefaults.assistChipColors(
-                    containerColor = if (selectedEmotionIndex == index) Green else LightGray,
-                    labelColor = if (selectedEmotionIndex == index) DarkWhite else Color.Black
-                ),
-                border = null,
-                shape = CircleShape
-            )
-        }
     }
 }

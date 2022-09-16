@@ -1,4 +1,4 @@
-package com.easylife.mooddiary.ui.view
+package com.easylife.mooddiary.ui.view.newdiary
 
 import android.graphics.Paint.Align
 import android.widget.Space
@@ -8,9 +8,12 @@ import com.easylife.mooddiary.R
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ChipDefaults
@@ -42,39 +45,25 @@ import com.easylife.mooddiary.ui.view.newdiary.MoodButton
 import com.easylife.mooddiary.ui.view.newdiary.SphereOfLifeButton
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.launch
 
 /**
  * Created by erenalpaslan on 15.09.2022
  */
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalPagerApi::class)
 @Composable
 fun NewDiaryBottomSheet(
     onDismissRequest: () -> Unit
 ) {
-    val x = remember {
-        Modifier
-            .wrapContentHeight()
-            .fillMaxWidth()
-            .animateContentSize()
-    }
-    val y = remember {
-        Modifier
-            .fillMaxSize()
-            .statusBarsPadding()
-            .animateContentSize()
-    }
-    val scrollState = rememberScrollState()
-    var isAnimate by remember {
+    val pagerState = rememberPagerState()
+    val isExpanded = remember {
         mutableStateOf(false)
     }
-    var selectedMoodIndex by remember {
-        mutableStateOf(-1)
-    }
-    var selectedSphereOfLifeIndex by remember {
-        mutableStateOf(-1)
-    }
-
+    val coroutineScope = rememberCoroutineScope()
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -84,106 +73,37 @@ fun NewDiaryBottomSheet(
             .background(Color.Black.copy(alpha = 0.6f))
             .systemBarsPadding()
     ) {
-        Card(
-            shape = if (isAnimate) RoundedCornerShape(0.dp) else RoundedCornerShape(30.dp),
-            modifier = Modifier
-                .padding(horizontal = if (isAnimate) 0.dp else 16.dp)
-                .then(if (isAnimate) y else x),
+        HorizontalPager(
+            count = 2,
+            state = pagerState,
+            userScrollEnabled = false
         ) {
-            Column(
-                modifier = Modifier.padding(top = if (isAnimate) 16.dp else 0.dp)
-            ) {
-                if (isAnimate) {
-                    Text(
-                        text = stringResource(id = R.string.new_diary_what_is_your_mood),
-                        style = MaterialTheme.typography.headlineSmall,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 16.dp),
-                        color = Color.Black
-                    )
-                }
+            when(it) {
+                0 -> NewDiaryFirstPage(
+                    isExpanded = isExpanded,
+                    onDismissRequest = { onDismissRequest() },
+                    onMoodSelected = {
 
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(5),
-                    horizontalArrangement = Arrangement.SpaceAround,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = if (isAnimate) 0.dp else 16.dp),
-                    verticalArrangement = if (isAnimate) Arrangement.Top else Arrangement.Center,
-                    userScrollEnabled = false
-                ) {
-                    itemsIndexed(MoodTypes.values()) { index, item ->
-                        MoodButton(item = item, selected = selectedMoodIndex == index) {
-                            selectedMoodIndex = index
-                            isAnimate = true
+                    },
+                    onEmotionSelected = {
+
+                    },
+                    onSphereOfLifeSelected = {
+
+                    },
+                    onNextClicked = {
+                        coroutineScope.launch {
+                            pagerState.animateScrollToPage(1)
                         }
                     }
+                )
+
+                1 -> NewDiarySecondPage(
+                    isExpanded = isExpanded,
+                ) { _, _ ->
+
                 }
-
-                if (isAnimate) {
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Text(
-                        text = stringResource(id = R.string.new_diary_emotions_title),
-                        style = MaterialTheme.typography.bodyLarge,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth(),
-                        color = Color.Black
-                    )
-
-                    EmotionList(onEmotionSelected = {
-
-                    })
-
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Text(
-                        text = stringResource(id = R.string.new_diary_sphere_of_life_title),
-                        style = MaterialTheme.typography.bodyLarge,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth(),
-                        color = Color.Black
-                    )
-
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(4),
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .wrapContentHeight(),
-                        userScrollEnabled = false
-                    ) {
-                        itemsIndexed(SphereTypes.values()) { index, item ->
-                            SphereOfLifeButton(item = item, selected = selectedSphereOfLifeIndex == index) {
-                                selectedSphereOfLifeIndex = index
-                            }
-                        }
-                    }
-
-                    Button(
-                        onClick = {  },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp)
-                    ) {
-                        Text(text = stringResource(id = R.string.button_next))
-                    }
-                }
-
             }
-
-        }
-        FloatingActionButton(
-            onClick = {
-                onDismissRequest()
-            },
-            modifier = Modifier
-                .padding(top = 10.dp, bottom = 16.dp)
-                .systemBarsPadding()
-        ) {
-            Icon(
-                imageVector = Icons.Rounded.Close,
-                contentDescription = "Close Icon"
-            )
         }
     }
 }

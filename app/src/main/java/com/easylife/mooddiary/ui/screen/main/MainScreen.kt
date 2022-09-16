@@ -7,13 +7,10 @@ import androidx.compose.material.BottomSheetScaffold
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -21,14 +18,11 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.easylife.mooddiary.base.BaseScreen
-import com.easylife.mooddiary.common.AppConstant
 import com.easylife.mooddiary.ui.navigation.BottomNavGraph
 import com.easylife.mooddiary.ui.navigation.Screen
 import com.easylife.mooddiary.ui.screen.diary.DiaryScreen
-import com.easylife.mooddiary.ui.view.NewDiaryBottomSheet
-import com.easylife.mooddiary.utils.extensions.getCurrentYear
+import com.easylife.mooddiary.ui.view.newdiary.NewDiaryBottomSheet
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import kotlinx.coroutines.launch
 
 /**
  * Created by erenalpaslan on 12.09.2022
