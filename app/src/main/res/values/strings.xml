@@ -57,6 +57,7 @@
 
     <!-- Add note -->
     <string name="new_diary_add_note">Add a note</string>
-
+    <string name="new_diary_title_placeholder">Title</string>
+    <string name="new_diary_description_placeholder">Description</string>
 
 </resources>
