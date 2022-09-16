@@ -57,7 +57,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPagerApi::class)
 @Composable
 fun NewDiaryBottomSheet(
-    onDismissRequest: () -> Unit
+    onDismissRequest: () -> Unit,
+    onSaveClicked: (String) -> Unit
 ) {
     val pagerState = rememberPagerState()
     val isExpanded = remember {
@@ -101,7 +102,7 @@ fun NewDiaryBottomSheet(
                 1 -> NewDiarySecondPage(
                     isExpanded = isExpanded,
                 ) { _, _ ->
-
+                    onSaveClicked("asdasdasd")
                 }
             }
         }

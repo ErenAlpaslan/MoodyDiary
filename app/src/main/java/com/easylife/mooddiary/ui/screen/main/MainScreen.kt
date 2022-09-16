@@ -136,6 +136,9 @@ class MainScreen : BaseScreen<MainViewModel, MainNavigationActions>() {
             NewDiaryBottomSheet(
                 onDismissRequest = {
                     isNewDiaryDialogVisible = false
+                },
+                onSaveClicked = {
+                    isNewDiaryDialogVisible = false
                 }
             )
         }
