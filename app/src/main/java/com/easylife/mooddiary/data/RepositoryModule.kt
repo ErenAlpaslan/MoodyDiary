@@ -1,7 +1,9 @@
 package com.easylife.mooddiary.data
 
 import com.easylife.mooddiary.data.repository.DateRepositoryImpl
+import com.easylife.mooddiary.data.repository.DiaryRepositoryImpl
 import com.easylife.mooddiary.domain.repository.DateRepository
+import com.easylife.mooddiary.domain.repository.DiaryRepository
 import org.koin.dsl.module
 
 /**
@@ -9,4 +11,5 @@ import org.koin.dsl.module
  */
 val repositoryModule = module {
     factory<DateRepository> { DateRepositoryImpl() }
+    factory<DiaryRepository> { DiaryRepositoryImpl(get()) }
 }

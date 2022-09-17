@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Moody Diary</string>
+    <string name="app_name">Moody</string>
 
     <!-- Button -->
     <string name="button_get_started">Get started</string>

@@ -1,6 +1,8 @@
 package com.easylife.mooddiary.domain
 
 import com.easylife.mooddiary.domain.usecases.GetDatesUseCase
+import com.easylife.mooddiary.domain.usecases.GetDiaryByDateUseCase
+import com.easylife.mooddiary.domain.usecases.SaveDiaryNoteUseCase
 import org.koin.dsl.module
 
 /**
@@ -8,4 +10,6 @@ import org.koin.dsl.module
  */
 val useCaseModule = module {
     factory { GetDatesUseCase(get(), get()) }
+    factory { SaveDiaryNoteUseCase(get(), get()) }
+    factory { GetDiaryByDateUseCase(get(), get()) }
 }

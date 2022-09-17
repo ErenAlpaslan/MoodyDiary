@@ -137,8 +137,9 @@ class MainScreen : BaseScreen<MainViewModel, MainNavigationActions>() {
                 onDismissRequest = {
                     isNewDiaryDialogVisible = false
                 },
-                onSaveClicked = {
+                onSaveClicked = {userDiaryInput ->
                     isNewDiaryDialogVisible = false
+                    DiaryScreen.userInput.value = userDiaryInput
                 }
             )
         }

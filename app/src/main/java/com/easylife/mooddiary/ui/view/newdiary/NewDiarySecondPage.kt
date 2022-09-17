@@ -20,7 +20,6 @@ import com.easylife.mooddiary.ui.view.MoodyTextField
 /**
  * Created by erenalpaslan on 16.09.2022
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewDiarySecondPage(
     isExpanded: MutableState<Boolean>,
@@ -99,7 +98,8 @@ fun NewDiarySecondPage(
                         start.linkTo(parent.start, 16.dp)
                         end.linkTo(parent.end, 16.dp)
                         width = Dimension.fillToConstraints
-                    }
+                    },
+                enabled = title.isNotEmpty() && description.isNotEmpty()
             ) {
                 Text(text = stringResource(id = R.string.button_save))
             }

@@ -9,6 +9,6 @@ import org.koin.dsl.module
  */
 val diaryModule = module {
     factory { DiaryScreen() }
-    viewModel { DiaryViewModel(get()) }
+    viewModel { DiaryViewModel(get(), get(), get()) }
     factory {(navController: NavController) -> DiaryNavigationActions(navController) }
 }

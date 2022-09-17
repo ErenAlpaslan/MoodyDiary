@@ -32,7 +32,7 @@ fun NewDiaryFirstPage(
     onMoodSelected: (MoodTypes) -> Unit,
     onEmotionSelected: (EmotionTypes) -> Unit,
     onSphereOfLifeSelected: (SphereTypes) -> Unit,
-    onNextClicked: () -> Unit
+    onNextClicked: () -> Unit,
 ) {
 
     val x = remember {
@@ -52,6 +52,9 @@ fun NewDiaryFirstPage(
     }
     var selectedSphereOfLifeIndex by remember {
         mutableStateOf(-1)
+    }
+    var selectedEmotion by remember {
+        mutableStateOf<EmotionTypes?>(null)
     }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -101,6 +104,7 @@ fun NewDiaryFirstPage(
 
                     item(span = { GridItemSpan(5) }) {
                         EmotionList(onEmotionSelected = {
+                            selectedEmotion = it
                             onEmotionSelected(it)
                         })
                     }
@@ -134,7 +138,8 @@ fun NewDiaryFirstPage(
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(16.dp)
+                                .padding(16.dp),
+                            enabled = selectedMoodIndex >= 0 && selectedSphereOfLifeIndex >= 0 && selectedEmotion != null
                         ) {
                             Text(text = stringResource(id = R.string.button_next))
                         }

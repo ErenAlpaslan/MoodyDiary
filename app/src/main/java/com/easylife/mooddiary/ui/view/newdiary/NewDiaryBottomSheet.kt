@@ -39,6 +39,7 @@ import com.easylife.mooddiary.common.enums.EmotionTypes
 import com.easylife.mooddiary.common.enums.MoodTypes
 import com.easylife.mooddiary.common.enums.SphereTypes
 import com.easylife.mooddiary.entity.MoodItem
+import com.easylife.mooddiary.entity.UserDiaryInput
 import com.easylife.mooddiary.ui.theme.*
 import com.easylife.mooddiary.ui.view.newdiary.EmotionList
 import com.easylife.mooddiary.ui.view.newdiary.MoodButton
@@ -58,13 +59,22 @@ import kotlinx.coroutines.launch
 @Composable
 fun NewDiaryBottomSheet(
     onDismissRequest: () -> Unit,
-    onSaveClicked: (String) -> Unit
+    onSaveClicked: (UserDiaryInput) -> Unit
 ) {
     val pagerState = rememberPagerState()
     val isExpanded = remember {
         mutableStateOf(false)
     }
     val coroutineScope = rememberCoroutineScope()
+    var mood by remember {
+        mutableStateOf<MoodTypes?>(null)
+    }
+    var emotion by remember {
+        mutableStateOf<EmotionTypes?>(null)
+    }
+    var sphereOfLife by remember {
+        mutableStateOf<SphereTypes?>(null)
+    }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -84,13 +94,13 @@ fun NewDiaryBottomSheet(
                     isExpanded = isExpanded,
                     onDismissRequest = { onDismissRequest() },
                     onMoodSelected = {
-
+                        mood = it
                     },
                     onEmotionSelected = {
-
+                        emotion = it
                     },
                     onSphereOfLifeSelected = {
-
+                        sphereOfLife = it
                     },
                     onNextClicked = {
                         coroutineScope.launch {
@@ -101,8 +111,10 @@ fun NewDiaryBottomSheet(
 
                 1 -> NewDiarySecondPage(
                     isExpanded = isExpanded,
-                ) { _, _ ->
-                    onSaveClicked("asdasdasd")
+                ) { title, description ->
+                    onSaveClicked(UserDiaryInput(
+                        mood, emotion, sphereOfLife, title, description
+                    ))
                 }
             }
         }

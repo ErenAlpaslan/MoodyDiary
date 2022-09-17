@@ -4,7 +4,10 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.easylife.mooddiary.base.BaseViewModel
 import com.easylife.mooddiary.domain.usecases.GetDatesUseCase
+import com.easylife.mooddiary.domain.usecases.GetDiaryByDateUseCase
+import com.easylife.mooddiary.domain.usecases.SaveDiaryNoteUseCase
 import com.easylife.mooddiary.entity.SingleDatePoint
+import com.easylife.mooddiary.entity.UserDiaryInput
 import com.easylife.mooddiary.utils.extensions.getErrorMessage
 import com.easylife.mooddiary.utils.extensions.getTodayIndex
 import com.easylife.wallpaperapp.utils.AppResult
@@ -22,7 +25,9 @@ import java.util.*
  * Created by erenalpaslan on 13.09.2022
  */
 class DiaryViewModel(
-    private val getDatesUseCase: GetDatesUseCase
+    private val getDatesUseCase: GetDatesUseCase,
+    private val saveDiaryUseCase: SaveDiaryNoteUseCase,
+    private val getDiaryByDateUseCase: GetDiaryByDateUseCase
 ): BaseViewModel() {
 
     private val _uiState: MutableStateFlow<DiaryScreenUiModel> = MutableStateFlow(DiaryScreenUiModel())
@@ -74,7 +79,40 @@ class DiaryViewModel(
             _uiState.update {
                 it.copy(selectedDate = date)
             }
+            getDiaryNotesByDate(date)
         }
     }
 
+    fun onSaveClicked(input: UserDiaryInput) {
+       viewModelScope.launch {
+            saveDiaryUseCase.execute(SaveDiaryNoteUseCase.Param(
+                input = input,
+                date = _uiState.value.selectedDate?.date ?: ""
+            )).collect {result ->
+                when(result) {
+                    is AppResult.Error -> _error.postValue(getErrorMessage(result))
+                    is AppResult.Success -> {
+                        getDiaryNotesByDate(_uiState.value.selectedDate)
+                    }
+                }
+            }
+       }
+    }
+
+    private suspend fun getDiaryNotesByDate(date: SingleDatePoint?) {
+        date?.let {
+            getDiaryByDateUseCase.execute(GetDiaryByDateUseCase.Param(it.date)).collect {result ->
+                when (result) {
+                    is AppResult.Error -> _error.postValue(getErrorMessage(result))
+                    is AppResult.Success -> {
+                        result.data?.let { list ->
+                            _uiState.update {
+                                it.copy(diaryNotes = list)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package com.easylife.mooddiary.ui.screen.diary
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -13,9 +14,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.easylife.mooddiary.R
 import com.easylife.mooddiary.base.BaseScreen
 import com.easylife.mooddiary.common.AppConstant
+import com.easylife.mooddiary.entity.UserDiaryInput
 import com.easylife.mooddiary.ui.view.DateItem
 import com.easylife.mooddiary.ui.view.DateSelector
 import com.easylife.mooddiary.ui.view.DiaryItem
@@ -42,6 +46,9 @@ class DiaryScreen : BaseScreen<DiaryViewModel, DiaryNavigationActions>() {
             mutableStateOf(false)
         }
         val listState = rememberLazyListState()
+        var onInput by remember {
+            userInput
+        }
 
         LaunchedEffect(
             key1 = uiState.selectedIndex
@@ -53,12 +60,18 @@ class DiaryScreen : BaseScreen<DiaryViewModel, DiaryNavigationActions>() {
             }
         }
 
+        LaunchedEffect(key1 = onInput) {
+            userInput.value?.let {
+                viewModel.onSaveClicked(it)
+            }
+        }
+
         Scaffold(
             topBar = {
                 CenterAlignedTopAppBar(
                     title = {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text(text = "Moody", style = MaterialTheme.typography.bodyLarge)
+                            Text(text = stringResource(id = R.string.app_name), style = MaterialTheme.typography.bodyLarge)
                             Text(
                                 text = uiState.month?.lowercase() ?: "",
                                 style = MaterialTheme.typography.bodySmall,
@@ -135,7 +148,7 @@ class DiaryScreen : BaseScreen<DiaryViewModel, DiaryNavigationActions>() {
                             }
                         }
 
-                        items(3) {
+                        items(uiState.diaryNotes) {
                             DiaryItem()
                         }
                     }
@@ -147,6 +160,7 @@ class DiaryScreen : BaseScreen<DiaryViewModel, DiaryNavigationActions>() {
     companion object {
         @OptIn(ExperimentalMaterial3Api::class)
         val drawerState = DrawerState(initialValue = DrawerValue.Closed)
+        val userInput: MutableState<UserDiaryInput?> = mutableStateOf(null)
     }
 
 }

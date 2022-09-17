@@ -1,5 +1,6 @@
 package com.easylife.mooddiary.ui.screen.diary
 
+import com.easylife.mooddiary.entity.DiaryNote
 import com.easylife.mooddiary.entity.SingleDatePoint
 import com.easylife.mooddiary.utils.extensions.getCurrentMonth
 import com.easylife.mooddiary.utils.extensions.getCurrentYear
@@ -12,5 +13,6 @@ data class DiaryScreenUiModel(
     val year: Int = getCurrentYear(),
     val month: String? = getCurrentMonth(),
     val selectedDate: SingleDatePoint? = null,
-    val selectedIndex: Int? = null
+    val selectedIndex: Int? = null,
+    val diaryNotes: List<DiaryNote> = listOf()
 )
