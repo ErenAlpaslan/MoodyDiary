@@ -34,7 +34,10 @@ class DiaryViewModel(
         MutableStateFlow(DiaryScreenUiModel())
     val uiState: StateFlow<DiaryScreenUiModel> = _uiState
 
-    fun getDates(year: Int? = null, scrollTo: Boolean = false) = viewModelScope.launch {
+    fun getDates(
+        year: Int? = null,
+        scrollTo: Boolean = false
+    ) = viewModelScope.launch {
         if (year != null) {
             _uiState.update {
                 it.copy(year = year)
@@ -56,8 +59,16 @@ class DiaryViewModel(
                             }
                             onDateSelected(selectedDate)
                         } else {
+                            val selected = _uiState.value.selectedDate
+                            val selectedIndex =
+                                list.indexOfFirst { it.month == selected?.month && it.day == selected?.day }
+                            if (selectedIndex >= 0) {
+                                getDiaryNotesByDate(list[selectedIndex])
+                            }
                             _uiState.update {
-                                it.copy(dates = list)
+                                it.copy(
+                                    dates = list
+                                )
                             }
                         }
                     }

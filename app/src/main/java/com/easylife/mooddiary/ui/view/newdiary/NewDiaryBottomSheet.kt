@@ -1,6 +1,7 @@
 package com.easylife.mooddiary.ui.view.newdiary
 
 import android.graphics.Paint.Align
+import android.util.Log
 import android.widget.Space
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.*

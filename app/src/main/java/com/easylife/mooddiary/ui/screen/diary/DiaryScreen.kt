@@ -63,6 +63,7 @@ class DiaryScreen : BaseScreen<DiaryViewModel, DiaryNavigationActions>() {
         LaunchedEffect(key1 = onInput) {
             userInput.value?.let {
                 viewModel.onSaveClicked(it)
+                userInput.value = null
             }
         }
 
@@ -134,7 +135,9 @@ class DiaryScreen : BaseScreen<DiaryViewModel, DiaryNavigationActions>() {
                             viewModel.onDateSelected(it)
                         }
                     )
-                    LazyColumn(modifier = Modifier.padding(bottom = 76.dp, start = 16.dp, end = 16.dp)) {
+                    LazyColumn(
+                        modifier = Modifier.padding(bottom = 76.dp, start = 16.dp, end = 16.dp),
+                    ) {
                         item {
                             Spacer(modifier = Modifier.height(10.dp))
                         }
@@ -148,8 +151,8 @@ class DiaryScreen : BaseScreen<DiaryViewModel, DiaryNavigationActions>() {
                             }
                         }
 
-                        items(uiState.diaryNotes) {
-                            DiaryItem()
+                        items(uiState.diaryNotes.reversed()) {note ->
+                            DiaryItem(diaryNote = note)
                         }
                     }
                 }

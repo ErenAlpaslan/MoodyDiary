@@ -23,3 +23,7 @@ enum class SphereTypes(
     FINANCE(6, R.string.new_diary_sphere_finance, R.drawable.ic_money),
     LEISURE(7, R.string.new_diary_sphere_leisure, R.drawable.ic_leisure)
 }
+
+fun getSphereOfLife(id: Int?): SphereTypes? {
+    return SphereTypes.values().find { it.id == id}
+}

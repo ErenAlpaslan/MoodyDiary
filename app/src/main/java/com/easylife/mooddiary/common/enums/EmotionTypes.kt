@@ -25,3 +25,7 @@ enum class EmotionTypes(val id: Int, @StringRes val emotionName: Int) {
     BORED(14, R.string.new_diary_emotion_bored),
     STRESSED(14, R.string.new_diary_emotion_stressed)
 }
+
+fun getEmotion(id: Int?): EmotionTypes? {
+    return EmotionTypes.values().find { it.id == id}
+}
