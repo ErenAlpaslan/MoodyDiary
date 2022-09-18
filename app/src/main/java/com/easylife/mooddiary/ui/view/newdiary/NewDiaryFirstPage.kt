@@ -7,7 +7,9 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -25,6 +27,7 @@ import com.easylife.mooddiary.common.enums.SphereTypes
 /**
  * Created by erenalpaslan on 16.09.2022
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewDiaryFirstPage(
     isExpanded: MutableState<Boolean>,
@@ -57,7 +60,9 @@ fun NewDiaryFirstPage(
         mutableStateOf<EmotionTypes?>(null)
     }
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Card(
             shape = if (isExpanded.value) RoundedCornerShape(0.dp) else RoundedCornerShape(30.dp),
             modifier = Modifier
@@ -70,14 +75,22 @@ fun NewDiaryFirstPage(
                 modifier = Modifier.padding(top = if (isExpanded.value) 16.dp else 0.dp)
             ) {
                 item(span = { GridItemSpan(5) }) {
-                    Text(
-                        text = stringResource(id = R.string.new_diary_what_is_your_mood),
-                        style = MaterialTheme.typography.headlineSmall,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 16.dp),
-                        color = Color.Black
+                    CenterAlignedTopAppBar(
+                        title = {
+                            Text(
+                                text = stringResource(id = R.string.new_diary_what_is_your_mood),
+                                style = MaterialTheme.typography.headlineSmall,
+                                textAlign = TextAlign.Center,
+                                color = Color.Black
+                            )
+                        },
+                        navigationIcon = {
+                            if (isExpanded.value) {
+                                IconButton(onClick = { onDismissRequest() }) {
+                                    Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = "Back Icon")
+                                }
+                            }
+                        }
                     )
                 }
 

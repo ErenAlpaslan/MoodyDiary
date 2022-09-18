@@ -112,11 +112,17 @@ fun NewDiaryBottomSheet(
 
                 1 -> NewDiarySecondPage(
                     isExpanded = isExpanded,
-                ) { title, description ->
-                    onSaveClicked(UserDiaryInput(
-                        mood, emotion, sphereOfLife, title, description
-                    ))
-                }
+                    onSaveClicked = { title, description ->
+                        onSaveClicked(UserDiaryInput(
+                            mood, emotion, sphereOfLife, title, description
+                        ))
+                    },
+                    onBackPressed = {
+                        coroutineScope.launch {
+                            pagerState.animateScrollToPage(0)
+                        }
+                    }
+                )
             }
         }
     }

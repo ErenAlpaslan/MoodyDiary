@@ -3,6 +3,8 @@ package com.easylife.mooddiary.ui.view.newdiary
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -20,10 +22,12 @@ import com.easylife.mooddiary.ui.view.MoodyTextField
 /**
  * Created by erenalpaslan on 16.09.2022
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewDiarySecondPage(
     isExpanded: MutableState<Boolean>,
-    onSaveClicked: (String, String) -> Unit
+    onSaveClicked: (String, String) -> Unit,
+    onBackPressed: () -> Unit
 ) {
     var title by remember {
         mutableStateOf("")
@@ -39,19 +43,28 @@ fun NewDiarySecondPage(
                 .background(MaterialTheme.colorScheme.surface),
         ) {
             val (pageNameRef, titleRef, descriptionRef, saveBtnRef) = createRefs()
-            Text(
-                text = stringResource(id = R.string.new_diary_add_note),
-                style = MaterialTheme.typography.headlineSmall,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-                    .constrainAs(pageNameRef) {
-                        top.linkTo(parent.top)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                    },
-                color = Color.Black
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(id = R.string.new_diary_add_note),
+                        style = MaterialTheme.typography.headlineSmall,
+                        textAlign = TextAlign.Center,
+                        color = Color.Black
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = { onBackPressed() }) {
+                        Icon(
+                            imageVector = Icons.Rounded.ArrowBack,
+                            contentDescription = "Back Icon"
+                        )
+                    }
+                },
+                modifier = Modifier.constrainAs(pageNameRef) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
             )
             MoodyTextField(
                 modifier = Modifier.constrainAs(titleRef) {
