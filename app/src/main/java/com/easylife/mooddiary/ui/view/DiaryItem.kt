@@ -42,11 +42,11 @@ import com.easylife.mooddiary.utils.extensions.toFormattedDate
 fun DiaryItem(diaryNote: DiaryNote) {
 
     Card(
-        shape = RoundedCornerShape(30.dp),
+        shape = RoundedCornerShape(24.dp),
         modifier = Modifier
             .padding(bottom = 10.dp)
             .fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onSecondaryContainer)
     ) {
         ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
             val (moodIconRef, emotionsRef, dateRef, categoryRef, titleRef, descriptionRef) = createRefs()
@@ -71,7 +71,9 @@ fun DiaryItem(diaryNote: DiaryNote) {
                     modifier = Modifier.constrainAs(emotionsRef) {
                         top.linkTo(moodIconRef.top)
                         start.linkTo(moodIconRef.end, 10.dp)
-                    })
+                    },
+                    color = MaterialTheme.colorScheme.onSurface
+                )
             }
             Text(
                 text = diaryNote.createdAt.toFormattedDate(),
@@ -80,7 +82,9 @@ fun DiaryItem(diaryNote: DiaryNote) {
                     top.linkTo(emotionsRef.bottom)
                     start.linkTo(moodIconRef.end, 10.dp)
                     bottom.linkTo(moodIconRef.bottom, 0.dp)
-                })
+                },
+                color = MaterialTheme.colorScheme.onSurface
+            )
 
             getSphereOfLife(diaryNote.sphereOfLifeId)?.let {
                 Box(
@@ -97,7 +101,8 @@ fun DiaryItem(diaryNote: DiaryNote) {
                     Text(
                         text = stringResource(id = it.sphereName),
                         style = MaterialTheme.typography.labelSmall,
-                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
             }
@@ -110,7 +115,8 @@ fun DiaryItem(diaryNote: DiaryNote) {
                     start.linkTo(parent.start, 16.dp)
                 },
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
@@ -125,7 +131,8 @@ fun DiaryItem(diaryNote: DiaryNote) {
                     }
                     .padding(horizontal = 16.dp),
                 maxLines = 3,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
     }

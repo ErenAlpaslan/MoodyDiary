@@ -1,10 +1,18 @@
 <resources>
     <string name="app_name">Moody</string>
+    <string name="full_app_name">Moody: Daily Mood Diary Tracker</string>
+    <string name="app_version">Version: %s</string>
 
     <!-- Button -->
     <string name="button_get_started">Get started</string>
     <string name="button_next">Next</string>
     <string name="button_save">Save</string>
+
+    <!-- Drawer -->
+    <string name="drawer_feedback">Feedback</string>
+    <string name="drawer_share_app">Share the app</string>
+    <string name="drawer_rate_app">Rate the app</string>
+    <string name="drawer_about">About</string>
 
     <!-- Main -->
     <string name="navigation_item_diary">Diary</string>
@@ -63,4 +71,8 @@
     <!-- Diary -->
     <string name="diary_empty_list">There is no any note for today!</string>
 
+    <!-- About -->
+    <string name="about_title">About</string>
+    <string name="about_support_and_development">Support &amp; Development</string>
+    
 </resources>

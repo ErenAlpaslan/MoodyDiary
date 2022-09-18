@@ -53,10 +53,10 @@ class MainScreen : BaseScreen<MainViewModel, MainNavigationActions>() {
     )
     @Composable
     override fun Content() {
-        val navController = rememberAnimatedNavController()
+        val bottomNavController = rememberAnimatedNavController()
         val navigateTo: (String) -> Unit = {
-            navController.navigate(it) {
-                popUpTo(navController.graph.findStartDestination().id) {
+            bottomNavController.navigate(it) {
+                popUpTo(bottomNavController.graph.findStartDestination().id) {
                     saveState = true
                 }
                 launchSingleTop = true
@@ -72,7 +72,9 @@ class MainScreen : BaseScreen<MainViewModel, MainNavigationActions>() {
         ModalNavigationDrawer(
             drawerState = DiaryScreen.drawerState,
             drawerContent = {
-                MainDrawerContent()
+                MainDrawerContent(navigationActions) {
+
+                }
             }
         ) {
             BottomSheetScaffold(
@@ -88,7 +90,7 @@ class MainScreen : BaseScreen<MainViewModel, MainNavigationActions>() {
                         .padding(it),
                     bottomBar = {
                         NavigationBar() {
-                            val navBackStackEntry by navController.currentBackStackEntryAsState()
+                            val navBackStackEntry by bottomNavController.currentBackStackEntryAsState()
                             val currentDestination = navBackStackEntry?.destination
                             items.forEachIndexed { index, item ->
                                 if (item.isFab) {
@@ -125,7 +127,7 @@ class MainScreen : BaseScreen<MainViewModel, MainNavigationActions>() {
                     }
                 ) {
                     BottomNavGraph(
-                        navController = navController,
+                        navController = bottomNavController,
                         paddingValues = it
                     )
                 }

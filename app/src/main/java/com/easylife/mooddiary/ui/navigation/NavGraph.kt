@@ -3,6 +3,7 @@ package com.easylife.mooddiary.ui.navigation
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import com.easylife.mooddiary.ui.screen.drawer.about.AboutScreen
 import com.easylife.mooddiary.ui.screen.main.MainScreen
 import com.easylife.mooddiary.ui.screen.onboarding.OnboardingScreen
 import com.easylife.mooddiary.ui.screen.splash.SplashScreen
@@ -37,6 +38,14 @@ fun NavGraph(navController: NavHostController) {
 
         composable(route = Screen.Main.route) {
             get<MainScreen>().Create(
+                viewModel = getViewModel(),
+                navController = navController,
+                navigationActions = get { parametersOf(navController) }
+            )
+        }
+
+        composable(route = Screen.About.route) {
+            get<AboutScreen>().Create(
                 viewModel = getViewModel(),
                 navController = navController,
                 navigationActions = get { parametersOf(navController) }

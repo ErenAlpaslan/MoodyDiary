@@ -7,9 +7,11 @@ import com.easylife.mooddiary.data.room.roomModule
 import com.easylife.mooddiary.domain.useCaseModule
 import com.easylife.mooddiary.ui.screen.analytics.analyticsModule
 import com.easylife.mooddiary.ui.screen.diary.diaryModule
+import com.easylife.mooddiary.ui.screen.drawer.about.aboutModule
 import com.easylife.mooddiary.ui.screen.main.mainModule
 import com.easylife.mooddiary.ui.screen.onboarding.onboardingModule
 import com.easylife.mooddiary.ui.screen.splash.splashModule
+import com.easylife.mooddiary.utils.helper.review.reviewModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -27,7 +29,9 @@ class MoodyApplication: Application() {
         analyticsModule,
         repositoryModule,
         useCaseModule,
-        roomModule
+        roomModule,
+        reviewModule,
+        aboutModule
     )
 
     override fun onCreate() {

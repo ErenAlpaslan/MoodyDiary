@@ -6,4 +6,5 @@ enum class Screen(val route: String) {
     Main(route = "main"),
     Diary(route = "diary"),
     Analytics(route = "analytics"),
+    About(route = "about")
 }
