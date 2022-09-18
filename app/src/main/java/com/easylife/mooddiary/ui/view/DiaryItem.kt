@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -41,7 +42,9 @@ fun DiaryItem(diaryNote: DiaryNote) {
 
     Card(
         shape = RoundedCornerShape(30.dp),
-        modifier = Modifier.padding(bottom = 10.dp).fillMaxWidth(),
+        modifier = Modifier
+            .padding(bottom = 10.dp)
+            .fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
@@ -83,7 +86,7 @@ fun DiaryItem(diaryNote: DiaryNote) {
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
                         .clip(CircleShape)
-                        .background(Orange)
+                        .background(colorResource(id = it.color))
                         .constrainAs(categoryRef) {
                             top.linkTo(moodIconRef.top)
                             bottom.linkTo(moodIconRef.bottom)
