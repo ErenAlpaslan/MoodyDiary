@@ -33,6 +33,7 @@ import com.easylife.mooddiary.common.enums.*
 import com.easylife.mooddiary.entity.DiaryNote
 import com.easylife.mooddiary.ui.theme.DarkWhite
 import com.easylife.mooddiary.ui.theme.Orange
+import com.easylife.mooddiary.utils.extensions.toFormattedDate
 
 /**
  * Created by erenalpaslan on 15.09.2022
@@ -73,7 +74,7 @@ fun DiaryItem(diaryNote: DiaryNote) {
                     })
             }
             Text(
-                text = diaryNote.createdAt.toString(),
+                text = diaryNote.createdAt.toFormattedDate(),
                 style = MaterialTheme.typography.labelSmall,
                 modifier = Modifier.constrainAs(dateRef) {
                     top.linkTo(emotionsRef.bottom)
