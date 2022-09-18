@@ -60,4 +60,7 @@
     <string name="new_diary_title_placeholder">Title</string>
     <string name="new_diary_description_placeholder">Description</string>
 
+    <!-- Diary -->
+    <string name="diary_empty_list">There is no any note for today!</string>
+
 </resources>

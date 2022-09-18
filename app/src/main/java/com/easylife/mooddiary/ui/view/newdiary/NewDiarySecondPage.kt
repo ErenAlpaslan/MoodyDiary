@@ -64,7 +64,7 @@ fun NewDiarySecondPage(
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-                }
+                }.padding(top = 16.dp)
             )
             MoodyTextField(
                 modifier = Modifier.constrainAs(titleRef) {

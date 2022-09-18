@@ -67,7 +67,8 @@ class DiaryViewModel(
                             }
                             _uiState.update {
                                 it.copy(
-                                    dates = list
+                                    dates = list,
+                                    selectedDate = if (selectedIndex >= 0) list[selectedIndex] else null
                                 )
                             }
                         }
@@ -130,7 +131,8 @@ class DiaryViewModel(
                             _uiState.update { uiModel ->
                                 uiModel.copy(
                                     dates = dates,
-                                    diaryNotes = list
+                                    diaryNotes = list,
+                                    isFetchCompleted = true
                                 )
                             }
                         }

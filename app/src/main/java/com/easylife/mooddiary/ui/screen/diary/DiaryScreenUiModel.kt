@@ -14,5 +14,6 @@ data class DiaryScreenUiModel(
     val month: String? = getCurrentMonth(),
     val selectedDate: SingleDatePoint? = null,
     val selectedIndex: Int? = null,
-    val diaryNotes: List<DiaryNote> = listOf()
+    val diaryNotes: List<DiaryNote> = listOf(),
+    val isFetchCompleted: Boolean = false
 )

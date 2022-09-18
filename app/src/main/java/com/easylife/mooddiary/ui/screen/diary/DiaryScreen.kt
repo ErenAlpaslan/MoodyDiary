@@ -15,7 +15,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.airbnb.lottie.compose.*
 import com.easylife.mooddiary.R
 import com.easylife.mooddiary.base.BaseScreen
 import com.easylife.mooddiary.common.AppConstant
@@ -135,29 +137,55 @@ class DiaryScreen : BaseScreen<DiaryViewModel, DiaryNavigationActions>() {
                             viewModel.onDateSelected(it)
                         }
                     )
-                    LazyColumn(
-                        modifier = Modifier.padding(bottom = 76.dp, start = 16.dp, end = 16.dp),
-                    ) {
-                        item {
-                            Spacer(modifier = Modifier.height(10.dp))
-                        }
-                        if (uiState.selectedDate != null) {
+                    if (uiState.diaryNotes.isNotEmpty()) {
+                        LazyColumn(
+                            modifier = Modifier.padding(bottom = 76.dp, start = 16.dp, end = 16.dp),
+                        ) {
                             item {
-                                Text(
-                                    text = "${uiState.selectedDate?.month} ${uiState.year}",
-                                    style = MaterialTheme.typography.headlineMedium
-                                )
                                 Spacer(modifier = Modifier.height(10.dp))
                             }
-                        }
+                            if (uiState.selectedDate != null) {
+                                item {
+                                    Text(
+                                        text = "${uiState.selectedDate?.month} ${uiState.year}",
+                                        style = MaterialTheme.typography.headlineMedium
+                                    )
+                                    Spacer(modifier = Modifier.height(10.dp))
+                                }
+                            }
 
-                        items(uiState.diaryNotes.reversed()) {note ->
-                            DiaryItem(diaryNote = note)
+                            items(uiState.diaryNotes.reversed()) {note ->
+                                DiaryItem(diaryNote = note)
+                            }
                         }
+                    }else if (uiState.isFetchCompleted){
+                        EmptyDiaryScreen()
                     }
                 }
             }
         )
+    }
+    
+    @Composable
+    fun EmptyDiaryScreen() {
+        val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.error))
+        val progress by animateLottieCompositionAsState(composition, iterations = LottieConstants.IterateForever)
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            LottieAnimation(
+                composition = composition,
+                progress = { progress },
+                modifier = Modifier.size(50.dp)
+            )
+           Text(
+               text = stringResource(id = R.string.diary_empty_list),
+               textAlign = TextAlign.Center,
+               modifier = Modifier.fillMaxWidth()
+           )
+        }
     }
 
     companion object {
