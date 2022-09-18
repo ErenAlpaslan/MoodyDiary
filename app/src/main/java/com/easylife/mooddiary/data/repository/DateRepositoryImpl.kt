@@ -2,6 +2,7 @@ package com.easylife.mooddiary.data.repository
 
 import android.util.Log
 import com.easylife.mooddiary.domain.repository.DateRepository
+import com.easylife.mooddiary.domain.repository.DiaryRepository
 import com.easylife.mooddiary.entity.SingleDatePoint
 import okhttp3.internal.format
 import java.text.SimpleDateFormat
@@ -10,7 +11,9 @@ import java.util.*
 /**
  * Created by erenalpaslan on 14.09.2022
  */
-class DateRepositoryImpl: DateRepository {
+class DateRepositoryImpl(
+    private val diaryRepository: DiaryRepository
+): DateRepository {
 
     override suspend fun createDatesOfTheYear(year: Int): List<SingleDatePoint> {
         val formatter = SimpleDateFormat("dd.MMM.yyyy")
@@ -31,11 +34,13 @@ class DateRepositoryImpl: DateRepository {
                     if (x > 0 && list.isNotEmpty() && month != list.last().month) {
                         break
                     }
+                    val count = diaryRepository.getDiaryNoteCountByDate(formatted)
                     list.add(SingleDatePoint(
                         date = formatted,
                         day = cal.get(Calendar.DAY_OF_MONTH).toString(),
                         dayName = cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()),
-                        month = month
+                        month = month,
+                        count = count
                     ))
                 }
                 calendar.add(Calendar.MONTH, 1)

@@ -28,32 +28,34 @@ class DiaryViewModel(
     private val getDatesUseCase: GetDatesUseCase,
     private val saveDiaryUseCase: SaveDiaryNoteUseCase,
     private val getDiaryByDateUseCase: GetDiaryByDateUseCase
-): BaseViewModel() {
+) : BaseViewModel() {
 
-    private val _uiState: MutableStateFlow<DiaryScreenUiModel> = MutableStateFlow(DiaryScreenUiModel())
+    private val _uiState: MutableStateFlow<DiaryScreenUiModel> =
+        MutableStateFlow(DiaryScreenUiModel())
     val uiState: StateFlow<DiaryScreenUiModel> = _uiState
 
-    fun getDates(year: Int? = null, scrollTo: Boolean = false) = viewModelScope.launch{
+    fun getDates(year: Int? = null, scrollTo: Boolean = false) = viewModelScope.launch {
         if (year != null) {
             _uiState.update {
                 it.copy(year = year)
             }
         }
         getDatesUseCase.execute(GetDatesUseCase.Param(year)).collect { result ->
-            when(result) {
+            when (result) {
                 is AppResult.Error -> _error.postValue(getErrorMessage(result))
                 is AppResult.Success -> {
                     result.data?.let { list ->
                         if (scrollTo) {
                             val todayIndex = list.getTodayIndex()
+                            val selectedDate = list[todayIndex]
                             _uiState.update {
                                 it.copy(
                                     dates = list,
-                                    selectedDate = list[todayIndex],
                                     selectedIndex = todayIndex
                                 )
                             }
-                        }else {
+                            onDateSelected(selectedDate)
+                        } else {
                             _uiState.update {
                                 it.copy(dates = list)
                             }
@@ -68,7 +70,7 @@ class DiaryViewModel(
         getDates(year, false)
     }
 
-    fun onMonthChanged(month: String?) = viewModelScope.launch{
+    fun onMonthChanged(month: String?) = viewModelScope.launch {
         _uiState.update {
             it.copy(month = month)
         }
@@ -84,30 +86,41 @@ class DiaryViewModel(
     }
 
     fun onSaveClicked(input: UserDiaryInput) {
-       viewModelScope.launch {
-            saveDiaryUseCase.execute(SaveDiaryNoteUseCase.Param(
-                input = input,
-                date = _uiState.value.selectedDate?.date ?: ""
-            )).collect {result ->
-                when(result) {
+        viewModelScope.launch {
+            saveDiaryUseCase.execute(
+                SaveDiaryNoteUseCase.Param(
+                    input = input,
+                    date = _uiState.value.selectedDate?.date ?: ""
+                )
+            ).collect { result ->
+                when (result) {
                     is AppResult.Error -> _error.postValue(getErrorMessage(result))
                     is AppResult.Success -> {
                         getDiaryNotesByDate(_uiState.value.selectedDate)
                     }
                 }
             }
-       }
+        }
     }
 
     private suspend fun getDiaryNotesByDate(date: SingleDatePoint?) {
         date?.let {
-            getDiaryByDateUseCase.execute(GetDiaryByDateUseCase.Param(it.date)).collect {result ->
+            getDiaryByDateUseCase.execute(GetDiaryByDateUseCase.Param(it.date)).collect { result ->
                 when (result) {
                     is AppResult.Error -> _error.postValue(getErrorMessage(result))
                     is AppResult.Success -> {
                         result.data?.let { list ->
-                            _uiState.update {
-                                it.copy(diaryNotes = list)
+                            val dates = _uiState.value.dates.apply {
+                                find { old -> old.date == it.date }?.let { oldDate ->
+                                    oldDate.count = list.size
+                                }
+                            }
+
+                            _uiState.update { uiModel ->
+                                uiModel.copy(
+                                    dates = dates,
+                                    diaryNotes = list
+                                )
                             }
                         }
                     }

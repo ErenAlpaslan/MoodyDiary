@@ -15,4 +15,5 @@ interface DiaryRepository {
 
     suspend fun removeDiaryNote(note: DiaryNote)
 
+    suspend fun getDiaryNoteCountByDate(date: String): Int
 }

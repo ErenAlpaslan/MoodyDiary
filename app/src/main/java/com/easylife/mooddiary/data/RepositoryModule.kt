@@ -10,6 +10,6 @@ import org.koin.dsl.module
  * Created by erenalpaslan on 14.09.2022
  */
 val repositoryModule = module {
-    factory<DateRepository> { DateRepositoryImpl() }
+    factory<DateRepository> { DateRepositoryImpl(get()) }
     factory<DiaryRepository> { DiaryRepositoryImpl(get()) }
 }

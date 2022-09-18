@@ -7,5 +7,6 @@ data class SingleDatePoint(
     val date: String,
     val day: String?,
     val dayName: String?,
-    val month: String?
+    val month: String?,
+    var count: Int
 )

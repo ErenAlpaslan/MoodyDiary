@@ -26,4 +26,8 @@ class DiaryRepositoryImpl(
         diaryDao.deleteDiary(note)
     }
 
+    override suspend fun getDiaryNoteCountByDate(date: String): Int {
+        return diaryDao.getDiaryCountsByDate(date)
+    }
+
 }
