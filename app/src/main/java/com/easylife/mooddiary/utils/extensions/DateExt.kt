@@ -55,3 +55,11 @@ fun Long.toFormattedDate(): String {
         ""
     }
 }
+
+fun Calendar.getMonthList(year: Int): List<String> {
+    this.set(Calendar.YEAR, year)
+    return (0..11).map {
+        this.set(Calendar.MONTH, it)
+        this.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())?: ""
+    }
+}

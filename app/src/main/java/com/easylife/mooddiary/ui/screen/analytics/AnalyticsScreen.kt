@@ -14,6 +14,8 @@ import androidx.compose.ui.unit.dp
 import com.easylife.mooddiary.base.BaseScreen
 import com.easylife.mooddiary.ui.theme.DarkWhite
 import com.easylife.mooddiary.ui.theme.Green
+import com.easylife.mooddiary.ui.view.MonthAndYearSelector
+import com.easylife.mooddiary.ui.view.monthlyLineChart.MonthlyLineChart
 
 /**
  * Created by erenalpaslan on 13.09.2022
@@ -26,36 +28,20 @@ class AnalyticsScreen: BaseScreen<AnalyticsViewModel, AnalyticsNavigationActions
             topBar = {
                 CenterAlignedTopAppBar(
                     title = {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            IconButton(onClick = { /*TODO*/ }) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_left_ios),
-                                    contentDescription = "",
-                                    tint = Green
-                                )
-                            }
-                            Spacer(modifier = Modifier.width(16.dp))
-                            Text(
-                                text = "January 2020",
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                            Spacer(modifier = Modifier.width(16.dp))
-                            IconButton(onClick = { /*TODO*/ }) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_right_ios),
-                                    contentDescription = "",
-                                    tint = DarkWhite
-                                )
-                            }
-                        }
+
                     }
                 )
             },
             content = {
-                Column(modifier = Modifier.padding(it).padding(16.dp)) {
-                    Box(modifier = Modifier.fillMaxWidth().height(250.dp).background(DarkWhite))
+                Column(modifier = Modifier
+                    .padding(it)
+                    .padding(16.dp)) {
+                    MonthlyLineChart()
                     Spacer(modifier = Modifier.height(16.dp))
-                    Box(modifier = Modifier.fillMaxWidth().height(250.dp).background(DarkWhite))
+                    Box(modifier = Modifier
+                        .fillMaxWidth()
+                        .height(250.dp)
+                        .background(DarkWhite))
                 }
             }
         )
