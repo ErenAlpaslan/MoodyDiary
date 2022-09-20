@@ -4,28 +4,34 @@ import android.graphics.PointF
 import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawStyle
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import com.easylife.mooddiary.R
-import com.easylife.mooddiary.ui.theme.DarkWhite
-import com.easylife.mooddiary.ui.theme.Gray
-import com.easylife.mooddiary.ui.theme.Green
-import com.easylife.mooddiary.ui.theme.Orange
+import com.easylife.mooddiary.ui.theme.*
 import com.easylife.mooddiary.ui.view.MonthAndYearSelector
 import com.easylife.mooddiary.utils.extensions.hasNext
 import kotlin.math.abs
@@ -74,16 +80,22 @@ fun MonthlyLineChart(
 ) {
     val icons by remember {
         mutableStateOf(
+
             listOf(
-                R.drawable.ic_happy,
-                R.drawable.ic_smile,
-                R.drawable.ic_normal,
-                R.drawable.ic_disappointed,
-                R.drawable.ic_crying
+                R.drawable.ic_cool_outlined,
+                R.drawable.ic_happy_outlined,
+                R.drawable.ic_normal_outlined,
+                R.drawable.ic_sad_outlined,
+                R.drawable.ic_very_bad_outlined
             )
         )
     }
-    val icon = ImageBitmap.imageResource(id = R.drawable.ic_happy)
+
+    val cool = ImageBitmap.imageResource(id = R.drawable.ic_cool_outlined)
+    val happy = ImageBitmap.imageResource(id = R.drawable.ic_happy_outlined)
+    val normal = ImageBitmap.imageResource(id = R.drawable.ic_normal_outlined)
+    val sad = ImageBitmap.imageResource(id = R.drawable.ic_sad_outlined)
+    val verySad = ImageBitmap.imageResource(id = R.drawable.ic_very_bad_outlined)
 
     Column {
         Column(
@@ -100,6 +112,13 @@ fun MonthlyLineChart(
             ) {
                 val itemSize = (size.height / 5)
                 (0..4).map {
+                    val icon = when (it) {
+                        0 -> cool
+                        1 -> happy
+                        2 -> normal
+                        3 -> sad
+                        else -> verySad
+                    }
                     drawImage(
                         image = icon,
                         dstOffset = IntOffset(
@@ -138,12 +157,12 @@ fun MonthlyLineChart(
                             (size.height - (itemSize * values[i - 1])) + 8.dp.toPx()
                         ),
                         end = Offset(x, y),
-                        strokeWidth = 3f
+                        strokeWidth = 8f
                     )
                 }
                 for (i in values.indices) {
                     val x1 = (lineSize * i) + 44.dp.toPx()
-                    val y1 = (size.height - (itemSize * values[i])) +8.dp.toPx()
+                    val y1 = (size.height - (itemSize * values[i])) + 8.dp.toPx()
                     drawCircle(
                         color = values[i].getColorByPoint(),
                         radius = 10f,
@@ -156,6 +175,32 @@ fun MonthlyLineChart(
                     )
                 }
             }
+            Box(modifier = Modifier.padding(start = 16.dp, top = 24.dp)) {
+                Spacer(modifier = Modifier.height(16.dp))
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceAround,
+                    modifier = Modifier
+                        .width(100.dp)
+                        .height(24.dp)
+                        .border((0.5).dp, Gray, CircleShape)
+                        .clip(CircleShape)
+                ) {
+                    IconButton(
+                        onClick = { /*TODO*/ },
+                    ) {
+                        Icon(imageVector = Icons.Rounded.Add, contentDescription = "")
+                    }
+                    Divider(modifier = Modifier
+                        .width(1.dp)
+                        .fillMaxHeight())
+                    IconButton(
+                        onClick = { /*TODO*/ },
+                    ) {
+                        Icon(imageVector = Icons.Rounded.Add, contentDescription = "")
+                    }
+                }
+            }
             Spacer(modifier = Modifier.height(54.dp))
         }
     }
@@ -163,16 +208,11 @@ fun MonthlyLineChart(
 
 fun Int.getColorByPoint(): Color {
     return when (this) {
-        1 -> Orange
-        2 -> Color.Yellow
-        3 -> Color.Cyan
-        4 -> Color.Green
-        5 -> Green
-        else -> Color.Red
+        1 -> Red
+        2 -> LightOrange
+        3 -> LightGreen
+        4 -> Blue
+        5 -> Purple
+        else -> Color.White
     }
-}
-
-@Composable
-fun Icons(icon: Int) {
-    ImageBitmap.imageResource(id = icon)
 }
